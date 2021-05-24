@@ -2,10 +2,21 @@ import { CircularProgress } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import Weather from "./Components/Weather";
 
-export default function App() {
+const App = () => {
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // const handleResize = () => {
+  //   setWindowWidth(window.innerWidth);
+  // };
+
+  // console.log(windowWidth);
+
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize);
+  // }, []);
+
   const [lat, setLat] = useState([]);
-  const [lon, setLong] = useState([]);
-  // const [cityName, setCityName] = useState("");
+  const [long, setLong] = useState([]);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -13,11 +24,10 @@ export default function App() {
       navigator.geolocation.getCurrentPosition(function (position) {
         setLat(position.coords.latitude);
         setLong(position.coords.longitude);
-        console.log(lon, lat);
       });
 
       await fetch(
-        `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${lon}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
+        `${process.env.REACT_APP_API_URL}/weather/?lat=${lat}&lon=${long}&units=metric&APPID=${process.env.REACT_APP_API_KEY}`
       )
         .then((res) => res.json())
         .then((result) => {
@@ -26,11 +36,11 @@ export default function App() {
         });
     };
     fetchData();
-  }, [lat, lon]);
+  }, [lat, long]);
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-200 uppercase">
+      <div className="flex flex-col justify-center items-center h-screen bg-yellow-200 uppercase ">
         {typeof data.main != "undefined" ? (
           <Weather weatherData={data} />
         ) : (
@@ -40,6 +50,10 @@ export default function App() {
           </div>
         )}
       </div>
+
+      {/* {windowWidth} */}
     </>
   );
-}
+};
+
+export default App;
